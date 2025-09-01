@@ -9,15 +9,14 @@ const MainNavigation = () => {
         <ul className={styles.list}>
           <li>
             <NavLink
-              to=''
-              end
+              to='/'
             >
               Home
             </NavLink>
           </li>
           <li>
             <NavLink
-              to='events'
+              to='/events'
             >
               Events
             </NavLink>
