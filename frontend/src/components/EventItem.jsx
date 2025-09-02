@@ -1,13 +1,27 @@
 import styles from './EventItem.module.scss';
-import {Link} from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 
 const EventItem = ({ event }) => {
   const {
+    id,
     title,
     desc: description,
     'img-url': image,
     'start-date': date,
   } = event;
+
+  const navigate = useNavigate();
+
+  const handleRemove = e => {
+    if (!confirm('정말 삭제하시겠습니까?')) return;
+
+    (async () => {
+      const res = await fetch(`http://localhost:9000/api/events/${id}`, {
+        method: 'DELETE'
+      });
+      if (res.ok) navigate('/events');
+    })();
+  };
 
   return (
     <article className={styles.event}>
@@ -20,7 +34,7 @@ const EventItem = ({ event }) => {
       <p>{description}</p>
       <menu className={styles.actions}>
         <Link to='edit'>Edit</Link>
-        <button>Delete</button>
+        <button onClick={handleRemove}>Delete</button>
       </menu>
     </article>
   );
