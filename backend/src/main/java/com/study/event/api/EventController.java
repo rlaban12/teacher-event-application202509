@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/api/events")
@@ -23,8 +24,10 @@ public class EventController {
 
     // 전체 조회 요청
     @GetMapping
-    public ResponseEntity<?> getList() {
-        List<EventResponse> events = eventService.getEvents();
+    public ResponseEntity<?> getList(
+            @RequestParam(defaultValue = "1") int page
+    ) {
+        Map<String, Object> events = eventService.getEvents(page);
 
         return ResponseEntity.ok().body(events);
     }
