@@ -42,6 +42,7 @@ public class Event {
     // 회원과의 연관관계를 설정 - 단방향 매핑
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ev_user_id")
+    @Setter
     private EventUser eventUser;
 
     // 수정 편의 메서드
