@@ -3,6 +3,7 @@ import EmailInput from './EmailInput.jsx';
 import VerificationInput from './VerificationInput.jsx';
 import {useState} from 'react';
 import ProgressBar from '../common/ProgressBar.jsx';
+import PasswordInput from './PasswordInput.jsx';
 
 const SignUpForm = () => {
 
@@ -12,24 +13,28 @@ const SignUpForm = () => {
   // 프로그레스바 노출 여부
   const [isNext, setIsNext] = useState(false);
 
-  // 이메일 중복확인이 끝날때 호출될 함수
-  const emailSuccessHandler = (email) => {
-
+  // 다음 스텝으로 넘어가는 함수
+  const nextStep = () => {
     setIsNext(true); // progress bar 띄우기
 
     setTimeout(() => {
-      setStep(2);
+      setStep(prev => prev + 1);
       setIsNext(false);
-      setEnteredEmail(email);
     }, 1000);
+  };
 
+  // 이메일 중복확인이 끝날때 호출될 함수
+  const emailSuccessHandler = (email) => {
+    setEnteredEmail(email);
+    nextStep();
   };
 
   return (
     <div className={styles.signupForm}>
       <div className={styles.formStepActive}>
         {step === 1 && <EmailInput onSuccess={emailSuccessHandler} />}
-        {step === 2 && <VerificationInput email={enteredEmail}/>}
+        {step === 2 && <VerificationInput email={enteredEmail} onSuccess={nextStep} />}
+        {step === 3 && <PasswordInput />}
 
         {isNext && <ProgressBar/>}
 

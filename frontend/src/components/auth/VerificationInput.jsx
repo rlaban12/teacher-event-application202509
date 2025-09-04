@@ -3,7 +3,7 @@ import {useEffect, useRef, useState} from 'react';
 import {debounce} from 'lodash';
 import {AUTH_API_URL} from '../../config/host-config.js';
 
-const VerificationInput = ({ email }) => {
+const VerificationInput = ({ email, onSuccess }) => {
 
   // 완성된 인증코드를 상태관리
   const [codes, setCodes] = useState(['', '', '', '']);
@@ -22,8 +22,6 @@ const VerificationInput = ({ email }) => {
   const bindRef = ($input, index) => {
     inputRefs.current[index] = $input;
   };
-
-
 
   const focusNextInput = index => {
     // 인덱스 검증 - 마지막 칸에서는 포커스 이동대신 블러처리
@@ -57,6 +55,7 @@ const VerificationInput = ({ email }) => {
     }
     // 검증 성공시 - 다음 스텝으로 이동하는 신호 올려보내기
     setError('');
+    onSuccess();
 
 
   }, 1000);
@@ -70,7 +69,6 @@ const VerificationInput = ({ email }) => {
     if (inputValue !== '' && !/^\d$/.test(inputValue)) {
       return;
     }
-
 
     const copyCodes = [...codes];
     copyCodes[index] = inputValue;
