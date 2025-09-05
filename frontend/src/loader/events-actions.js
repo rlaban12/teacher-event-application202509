@@ -3,6 +3,7 @@
 import {redirect} from 'react-router-dom';
 import {AUTH_API_URL, EVENT_API_URL} from '../config/host-config.js';
 import { getUserToken } from './events-loader.js';
+import {fetchWithAuth} from '../config/api.js';
 
 export const saveAction = async ({ request, params }) => {
   // console.log('save action!!');
@@ -23,14 +24,7 @@ export const saveAction = async ({ request, params }) => {
     requestUrl += `/${params.eventId}`;
   }
 
-  const response = await fetch(requestUrl, {
-    method: request.method,
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer ' + getUserToken()
-    },
-    body: JSON.stringify(payload)
-  });
+  const response = await fetchWithAuth(requestUrl, request.method, payload);
 
   if (!response.ok) {
     throw new Error('이벤트 생성에 실패했습니다.');
@@ -46,9 +40,7 @@ export const deleteAction = async ({params}) => {
 
   console.log('삭제 액션 함수 호출!');
 
-  const res = await fetch(`${EVENT_API_URL}/${params.eventId}`, {
-    method: 'DELETE'
-  });
+  const res = await fetchWithAuth(`${EVENT_API_URL}/${params.eventId}`, 'DELETE');
 
   return redirect('/events');
 };
